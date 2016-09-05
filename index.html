@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>etanalu盒子</title>
+</head>
+
+<body>
+	<style type="text/css">
+
+		body{background: #333; max-width: 980px;}
+		.etanalu{ 
+			width:300px; height: 300px; position: absolute; left: 50%; top: 50%; margin-left: -150px; margin-top: -150px;
+			-webkit-transform-style: preserve-3d;transform-style: preserve-3d; 
+			backface-visibility:hidden;
+			-webkit-transform-origin:50% 50%; 
+			perspective:0px ; perspective-origin:50% 50%;
+		
+			-webkit-transform-origin: center center; 
+			
+			-webkit-transform-origin: center center; 
+			/*-webkit-transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);*/
+		 }
+		.sq{position: absolute; width: 100%; height: 100%; text-align: center; line-height: 300px; font-size:100px; color: #fff; background: #000;}
+		
+		.sq1{-webkit-transform:  translate3d(0,0,-150px) rotate(0deg); opacity: 1;}
+		.sq2{-webkit-transform: translate3d(0,0,150px) rotate(0deg) ;opacity: 1;}
+		.sq3{-webkit-transform:  rotateY(90deg) translateZ(-150px);}
+		.sq4{-webkit-transform:  rotateY(90deg) translateZ(150px);}
+		.sq5{-webkit-transform: rotateX(90deg)  translate3d(0px,0px,-150px); }
+		.sq6{-webkit-transform:  rotateX(90deg) translate3d(0px,0px,150px);}
+
+		.sq img{width: 100%; height: 100%; }
+	</style>
+
+	<div class="etanalu" id="etanalu" style="-webkit-transform:rotateX(30deg) rotateY(30deg) rotateZ(0deg);">
+				<span class="sq sq1"><img src="./img/1.jpg" /></span>
+				<span class="sq sq2"><img src="./img/2.jpg" /></span>
+				 <span class="sq sq3"><img src="./img/3.png" /></span>
+				<span class="sq sq4"><img src="./img/4.png" /></span>
+				 <span class="sq sq5"><img src="./img/5.jpg" /></span>
+				<span class="sq sq6"><img src="./img/6.png" /></span> 
+
+	</div>
+
+	<script type="text/javascript">
+		
+
+		var handleStart,handleMove,handleEnd;
+		if(window.location.toString().indexOf('pref=padindex') != -1){
+
+		}else{
+			if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){  
+		      if(window.location.href.indexOf("?mobile")<0){
+				try{
+					if(/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry|iPad/i.test(navigator.userAgent)){
+						window.handleStart="touchstart",window.handleMove="touchmove",handleEnd="touchend";
+					}
+				}catch(e){}
+			}
+			}else{
+					window.handleStart="mousedown",window.handleMove="mousemove",handleEnd="mouseup";
+
+			}
+		}
+		 var etanalu=document.getElementById("etanalu");
+		 var movePos={"x":0,"y":0};
+		 var lastPos={"x":0,"y":0};
+		//alert(window.etanalu.style.webkitTransform);
+		 var xArr = [],yArr = [];   
+		 var disX=0,disY=0;
+
+		
+		function etanaluChange(x,y,z){
+
+			window.etanalu.style.transform="rotateX("+x+"deg) rotateY("+y+"deg) rotateZ("+z+"deg)";
+			window.etanalu.style.webkitTransform="rotateX("+x+"deg) rotateY("+y+"deg) rotateZ("+z+"deg)";
+			window.etanalu.style.MozTransform="rotateX("+x+"deg) rotateY("+y+"deg) rotateZ("+z+"deg)";
+
+
+
+		}
+
+
+
+		window.addEventListener(handleStart, this.movestart=function (e){
+				e.preventDefault();
+				
+               
+            	window.lastPos.x=e.pageX/2||e.touches[0].pageX/2||window.lastPos.x;
+		    	window.lastPos.y=e.pageY/2||e.touches[0].pageY/2||window.lastPos.y;
+
+				window.addEventListener(handleMove, this.moving=function (e){
+						e.preventDefault();
+						
+						console.log(e);
+
+		 				var x=e.pageX/2||e.touches[0].pageX/2;
+		 				var y=e.pageY/2||e.touches[0].pageY/2;
+
+
+					     window.movePos.x += x - window.lastPos.x; 
+
+	                     window.movePos.y += y - window.lastPos.y; 
+						
+
+				    	window.etanaluChange(window.movePos.y,window.movePos.x,0);
+
+
+              
+
+					    window.lastPos.x = e.pageX/2||e.touches[0].pageX/2;   
+
+                    	window.lastPos.y = e.pageY/2||e.touches[0].pageY/2;   
+
+						
+						
+				});
+
+				window.addEventListener(handleEnd, this.movend=function (e){
+
+					
+						window.removeEventListener(handleMove,this.moving,false);
+						window.removeEventListener(handleEnd,this.movend,false);
+						return false;
+				});
+
+		},false)
+
+		
+
+	</script>
+</body>
+</html>
